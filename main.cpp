@@ -2,7 +2,7 @@
  * @file main.cpp
  * @brief Main entry point for the unofficial-fan-videogame-baseball-club game.
  * @author  Eeshvar Das (Erik Douglas Ward)
- * @date 2025-07-23
+ * @date 2025-Jul-23
  *
  *
  * Copyright (C) 2025 Eeshvar Das (Erik Douglas Ward)
