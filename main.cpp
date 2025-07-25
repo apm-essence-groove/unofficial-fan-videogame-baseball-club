@@ -37,39 +37,40 @@ int main() {
 
     // Initialize the 18 teams with cities and mascot/fan theme placeholders
     std::vector<Team> all_teams;
-    int current_id = 1;
+    int current_team_id = 1;
 
     // Atlantic Union (9 teams)
-    all_teams.push_back({current_id++, "Maine", "Lumberjack Spirit", UnionType::ATLANTIC_UNION, RegionType::KEYSTONE, {}});
-    all_teams.push_back({current_id++, "New York", "Metropolitan Spirit", UnionType::ATLANTIC_UNION, RegionType::KEYSTONE, {}});
-    all_teams.push_back({current_id++, "Philadelphia", "Founder Spirit", UnionType::ATLANTIC_UNION, RegionType::KEYSTONE, {}});
-    all_teams.push_back({current_id++, "Pittsburgh", "Iron Spirit", UnionType::ATLANTIC_UNION, RegionType::KEYSTONE, {}});
-    all_teams.push_back({current_id++, "Atlanta", "Peach Blossom", UnionType::ATLANTIC_UNION, RegionType::TIDEWATER, {}});
-    all_teams.push_back({current_id++, "Miami", "Manatee Calm", UnionType::ATLANTIC_UNION, RegionType::TIDEWATER, {}});
-    all_teams.push_back({current_id++, "Charlotte", "Aviator Grit", UnionType::ATLANTIC_UNION, RegionType::TIDEWATER, {}});
-    all_teams.push_back({current_id++, "Cleveland", "Guardian Resolve", UnionType::ATLANTIC_UNION, RegionType::CONFLUENCE, {}});
-    all_teams.push_back({current_id++, "Detroit", "Automaker Drive", UnionType::ATLANTIC_UNION, RegionType::CONFLUENCE, {}});
+    all_teams.emplace_back(current_team_id++, "Maine", "Lumberjack Spirit", UnionType::ATLANTIC, RegionType::KEYSTONE);
+    all_teams.emplace_back(current_team_id++, "New York", "Metropolitan Spirit", UnionType::ATLANTIC, RegionType::KEYSTONE);
+    all_teams.emplace_back(current_team_id++, "Philadelphia", "Founder Spirit", UnionType::ATLANTIC, RegionType::KEYSTONE);
+    all_teams.emplace_back(current_team_id++, "Pittsburgh", "Iron Spirit", UnionType::ATLANTIC, RegionType::KEYSTONE);
+    all_teams.emplace_back(current_team_id++, "Atlanta", "Peach Blossom", UnionType::ATLANTIC, RegionType::TIDEWATER);
+    all_teams.emplace_back(current_team_id++, "Miami", "Manatee Calm", UnionType::ATLANTIC, RegionType::TIDEWATER);
+    all_teams.emplace_back(current_team_id++, "Charlotte", "Aviator Grit", UnionType::ATLANTIC, RegionType::TIDEWATER);
+    all_teams.emplace_back(current_team_id++, "Cleveland", "Guardian Resolve", UnionType::ATLANTIC, RegionType::THE_CONFLUENCE);
+    all_teams.emplace_back(current_team_id++, "Detroit", "Automaker Drive", UnionType::ATLANTIC, RegionType::THE_CONFLUENCE);
 
     // Pacific Union (9 teams)
-    all_teams.push_back({current_id++, "Los Angeles", "Star Radiance", UnionType::PACIFIC_UNION, RegionType::GOLDEN_PENNANT, {}});
-    all_teams.push_back({current_id++, "San Diego", "Surf Vibe", UnionType::PACIFIC_UNION, RegionType::GOLDEN_PENNANT, {}});
-    all_teams.push_back({current_id++, "San Francisco", "Seal Endurance", UnionType::PACIFIC_UNION, RegionType::GOLDEN_PENNANT, {}});
-    all_teams.push_back({current_id++, "Seattle", "Rainier Force", UnionType::PACIFIC_UNION, RegionType::CASCADE_TERRITORY, {}});
-    all_teams.push_back({current_id++, "Austin", "Armadillo Resilience", UnionType::PACIFIC_UNION, RegionType::SUNSTONE_DIVISION, {}});
-    all_teams.push_back({current_id++, "Dallas", "Lonestar Pride", UnionType::PACIFIC_UNION, RegionType::SUNSTONE_DIVISION, {}});
-    all_teams.push_back({current_id++, "Denver", "Summit Peak", UnionType::PACIFIC_UNION, RegionType::SUNSTONE_DIVISION, {}});
-    all_teams.push_back({current_id++, "St. Louis", "Archer Aim", UnionType::PACIFIC_UNION, RegionType::HEARTLAND_CORE, {}});
-    all_teams.push_back({current_id++, "Kansas City", "Monarch Reign", UnionType::PACIFIC_UNION, RegionType::HEARTLAND_CORE, {}});
+    all_teams.emplace_back(current_team_id++, "Los Angeles", "Star Radiance", UnionType::PACIFIC, RegionType::GOLDEN_PENNANT);
+    all_teams.emplace_back(current_team_id++, "San Diego", "Surf Vibe", UnionType::PACIFIC, RegionType::GOLDEN_PENNANT);
+    all_teams.emplace_back(current_team_id++, "San Francisco", "Seal Endurance", UnionType::PACIFIC, RegionType::GOLDEN_PENNANT);
+    all_teams.emplace_back(current_team_id++, "Seattle", "Rainier Force", UnionType::PACIFIC, RegionType::CASCADE_TERRITORY);
+    all_teams.emplace_back(current_team_id++, "Austin", "Armadillo Resilience", UnionType::PACIFIC, RegionType::THE_SUNSTONE_DIVISION);
+    all_teams.emplace_back(current_team_id++, "Dallas", "Lonestar Pride", UnionType::PACIFIC, RegionType::THE_SUNSTONE_DIVISION);
+    all_teams.emplace_back(current_team_id++, "Denver", "Summit Peak", UnionType::PACIFIC, RegionType::THE_SUNSTONE_DIVISION);
+    all_teams.emplace_back(current_team_id++, "St. Louis", "Archer Aim", UnionType::PACIFIC, RegionType::THE_HEARTLAND_CORE);
+    all_teams.emplace_back(current_team_id++, "Kansas City", "Monarch Reign", UnionType::PACIFIC, RegionType::THE_HEARTLAND_CORE);
 
     // Populate teams with some players, including "star players"
+    int current_player_id = 1;
     for (auto& team : all_teams) {
-        team.roster.push_back({"PlayerA_" + team.city, 85, 1.5, 5000000, 10000000, false});
-        team.roster.push_back({"PlayerB_" + team.city, 80, 1.2, 3000000, 5000000, false});
-        team.roster.push_back({"PlayerC_" + team.city, 75, 1.0, 2000000, 3000000, false});
+        team.players.emplace_back(current_player_id++, "PlayerA_" + team.city, 85.0, 5000000, 10000000, false);
+        team.players.emplace_back(current_player_id++, "PlayerB_" + team.city, 80.0, 3000000, 5000000, false);
+        team.players.emplace_back(current_player_id++, "PlayerC_" + team.city, 75.0, 2000000, 3000000, false);
         if (team.city == "Los Angeles" || team.city == "New York" || team.city == "Austin") {
-            team.roster.push_back({"StarPlayer_" + team.city, 95, 2.0, 15000000, 25000000, true});
+            team.players.emplace_back(current_player_id++, "StarPlayer_" + team.city, 95.0, 15000000, 25000000, true);
         } else {
-            team.roster.push_back({"PlayerD_" + team.city, 70, 0.8, 1000000, 2000000, false});
+            team.players.emplace_back(current_player_id++, "PlayerD_" + team.city, 70.0, 1000000, 2000000, false);
         }
     }
 
