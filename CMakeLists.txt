@@ -1,28 +1,23 @@
-# --- Basic Project Setup ---
-cmake_minimum_required(VERSION 3.10)
-project(MyAPMWProject VERSION 3.5.0 LANGUAGES CXX) # Project version reflects C++ 3.5.0 [18]
+# Root/MyAPMWProject/CMakeLists.txt
+cmake_minimum_required(VERSION 3.10) # Minimum CMake version
+project(MyAPMWProject VERSION 3.5.0 LANGUAGES CXX) # Project name and version
 
-# --- Compiler and Standard Settings ---
-set(CMAKE_CXX_STANDARD 17) # As per previous setup [19]
+# Set the C++ standard for the entire project
+set(CMAKE_CXX_STANDARD 17) # Assuming a modern C++ standard for C++ 3.5.0 project version
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_EXTENSIONS OFF) # Ensure strict standard compliance
 
-# --- Add Modules (Subdirectories) ---
-# Tells CMake to process the CMakeLists.txt file in each subdirectory.
-# Each subdirectory is expected to create a library target.
-message(STATUS "Adding project modules...")
-# Renamed from 'data_models' to 'money_and_players' [16]
-add_subdirectory(money_and_players) 
+# Add project modules (subdirectories)
+# This processes the CMakeLists.txt in each respective directory
+add_subdirectory(money_and_players)
 add_subdirectory(scheduling)
 
-# --- Main Executable ---
-# Creates the main executable for your project from its source file(s).
-# Assumed main.cpp is at the project root [5, 7]
-add_executable(main_app main.cpp) 
+# Create the main executable from main.cpp located at the root
+add_executable(apmw_baseball_simulator main.cpp)
 
-# --- Linking ---
-# Links the libraries created by the modules to the main executable.
-target_link_libraries(main_app PRIVATE
-    money_and_players_lib # Updated library name
-    scheduling_lib
+# Link the executable against the libraries created by the modules.
+# CMake will automatically handle the include paths defined by the libraries.
+target_link_libraries(apmw_baseball_simulator PRIVATE
+    money_and_players_lib # Provides Player, Team, Game structures
+    scheduling_lib        # Provides LeagueScheduler2 logic
 )
