@@ -3,35 +3,38 @@
 
 #include <string>
 #include <vector>
-#include <memory> // For std::shared_ptr if managing dynamically allocated Team objects
+#include "team_data.h" // Include Team structure
 
-#include "team_data.h" // Include Team definition
-
-// Represents a single game
-struct Game {
-    std::shared_ptr<Team> team1; // Using shared_ptr for shared ownership of Team objects
-    std::shared_ptr<Team> team2;
-    std::shared_ptr<Team> designated_home_team_for_batting; // For Crossroads Games' alternating bat rule [13, 14, 18-20]
-    std::shared_ptr<Team> actual_host_stadium; // The team hosting the residency, if applicable [3-9]
-    std::string date; // Format: YYYY-MM-DD
-    std::string game_type; // e.g., "Regular Season", "Crossroads Game", "Heartland-Confluence Series" [15, 40]
-
-    // Constructor
-    Game(std::shared_ptr<Team> t1, std::shared_ptr<Team> t2, std::shared_ptr<Team> designated_home, std::shared_ptr<Team> host_stadium, std::string d, std::string type)
-        : team1(t1), team2(t2), designated_home_team_for_batting(designated_home), actual_host_stadium(host_stadium), date(d), game_type(type) {}
+// Enum to categorize different types of games
+enum class GameType {
+    REGULAR_SEASON,
+    CROSSROADS_GAME, // Special games between visiting residents at a host's stadium [38, 39, 46, 47]
+    PLAYOFF_GAME,
+    ALL_STAR,
+    UNKNOWN
 };
 
-// Represents a Residency Block [3-9]
+// Represents a single game matchup
+struct Game {
+    Team team1;
+    Team team2;
+    Team designated_home_team_for_batting; // Crucial for "alternating first bat" rule in Crossroads Games [26, 38, 39, 45, 48]
+    Team actual_host_stadium; // The team whose stadium the game is played at [26, 45]
+    std::string date;         // Date of the game (e.g., "YYYY-MM-DD")
+    GameType game_type;
+
+    Game() : game_type(GameType::UNKNOWN) {}
+};
+
+// Represents a residency block, where multiple teams gather at a host stadium
 struct ResidencyBlock {
-    std::shared_ptr<Team> host_team; // One team acts as the Host [3-9]
-    std::vector<std::shared_ptr<Team>> visiting_residents; // Two or more other teams are Visiting Residents [3-9]
-    std::vector<Game> games_in_block; // All games played during this residency
+    Team host_team;
+    std::vector<Team> visiting_residents;
+    std::vector<Game> games; // All games played within this residency [26, 45]
     std::string start_date;
     std::string end_date;
 
-    // Constructor
-    ResidencyBlock(std::shared_ptr<Team> host, const std::vector<std::shared_ptr<Team>>& visitors, std::string start, std::string end)
-        : host_team(host), visiting_residents(visitors), start_date(start), end_date(end) {}
+    ResidencyBlock() {}
 };
 
 #endif // GAME_DATA_H
