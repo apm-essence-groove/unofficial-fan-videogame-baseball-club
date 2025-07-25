@@ -5,14 +5,14 @@
 #include <vector>
 #include "player_data.h" // Include the new player data structure
 
-// Enum for Union types (e.g., Atlantic Union, Pacific Union) [27, 28, 30, 31, 33, 41, 42]
+// Enum for Union types (e.g., Atlantic Union, Pacific Union)
 enum class UnionType {
     ATLANTIC,
     PACIFIC,
     UNKNOWN
 };
 
-// Enum for Region types within Unions [28, 30, 31, 33, 42-44]
+// Enum for Region types within Unions
 enum class RegionType {
     KEYSTONE,
     TIDEWATER,
@@ -26,16 +26,16 @@ enum class RegionType {
 
 // Represents a baseball team in the league.
 // For C++ 3.5.0, no official team name field is included,
-// but city and mascot_theme are used as placeholders [24-26].
+// but city and mascot_theme are used as placeholders.
 struct Team {
     int id;
     std::string city;
-    std::string mascot_theme; // Placeholder for mascot or fan theme [24-26]
+    std::string mascot_theme; // Placeholder for mascot or fan theme
     UnionType union_type;
     RegionType region_type;
     int wins;
     int losses;
-    // New: A roster of Player objects for this team [8, 9]
+    // New: A roster of Player objects for this team
     std::vector<Player> players;
 
     // Default constructor
