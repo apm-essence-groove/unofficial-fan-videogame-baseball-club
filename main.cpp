@@ -21,11 +21,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// main.cpp (Modified for Money and Players branch)
 #include <iostream>
 #include <vector>
 #include <string>
-#include <ctime>
-#include <cstdlib>
+#include "team_data.h"    // Includes the modified Team structure
+#include "player_data.h"  // NEW: Includes the Player structure
+// #include "game_data.h"    // Existing header for Game and ResidencyBlock structures
+// #include "league_scheduler.h" // Existing header for LeagueScheduler class
 
 // Forward declarations for classes
 class Player;
@@ -180,33 +183,62 @@ public:
  * @return 0 on successful execution.
  */
 int main() {
-    // Seed the random number generator
-    srand(static_cast<unsigned int>(time(0)));
+    // Initialize 18 teams (simplified to a few examples for brevity)
+    // Note: Official team names are still excluded in this C++ 3.5.0 version,
+    // using city and mascot/fan theme placeholders instead [5-8].
+    std::vector<Team> teams;
 
-    // Create teams
-    Team homeTeam("Mesa Solar Sox");
-    Team awayTeam("Peoria Javelinas");
+    // Example Teams (using established APMW lore cities/themes)
+    Team maine_lumberjacks("Maine", "Lumberjack Spirit", UnionType::Atlantic, RegionType::Keystone); [9]
+    Team ny_metropolitans("New York", "Metropolitan Pulse", UnionType::Atlantic, RegionType::Keystone); [9]
+    Team la_stars("Los Angeles", "Hollywood Stars", UnionType::Pacific, RegionType::GoldenPennant); [10]
+    Team cleveland_guardians("Cleveland", "Industrial Grit", UnionType::Atlantic, RegionType::TheConfluence); [10]
 
-    // Add players to teams
-    homeTeam.addPlayer(Player("Ace Pitcher", 8));
-    homeTeam.addPlayer(Player("Slugger Sam", 7));
-    homeTeam.addPlayer(Player("Speedy Pete", 6));
+    // Add example Players to teams, demonstrating financial values and star status [1-3]
+    // Player(id, name, position, skill_rating, salary, market_value, is_star_player)
+    maine_lumberjacks.add_player(Player(1, "Babe Blue", "P", 95.0, 30000000.0, 45000000.0, true)); // Star Player [1, 2]
+    maine_lumberjacks.add_player(Player(2, "Paul Bunyan", "1B", 88.0, 12000000.0, 15000000.0, false));
+    maine_lumberjacks.add_player(Player(3, "Sawyer McTree", "OF", 80.0, 5000000.0, 6000000.0, false));
 
-    awayTeam.addPlayer(Player("Curveball King", 8));
-    awayTeam.addPlayer(Player("Homerun Harry", 7));
-    awayTeam.addPlayer(Player("Golden Glove Gary", 6));
+    ny_metropolitans.add_player(Player(4, "Empire Ace", "P", 92.0, 25000000.0, 35000000.0, true)); // Star Player [1, 2]
+    ny_metropolitans.add_player(Player(5, "Broadway Bomber", "CF", 87.0, 11000000.0, 14000000.0, false));
 
-    // Create and start the game
-    Game baseballGame(homeTeam, awayTeam);
-    baseballGame.startGame();
+    la_stars.add_player(Player(6, "Hollywood Heat", "P", 98.0, 40000000.0, 60000000.0, true)); // High-value Star Player [1, 2]
+    la_stars.add_player(Player(7, "Sunset Striker", "SS", 90.0, 18000000.0, 22000000.0, false));
 
-    // Main game loop
-    while (!baseballGame.isGameOver()) {
-        baseballGame.playInning();
+    cleveland_guardians.add_player(Player(8, "Lakefront Lefty", "P", 85.0, 9000000.0, 10000000.0, false));
+    cleveland_guardians.add_player(Player(9, "Rustbelt Slugger", "DH", 90.0, 15000000.0, 20000000.0, true)); // Star Player [1, 2]
+
+    teams.push_back(maine_lumberjacks);
+    teams.push_back(ny_metropolitans);
+    teams.push_back(la_stars);
+    teams.push_back(cleveland_guardians);
+    // ... In a full implementation, all 18 teams would be created and populated [11].
+
+    std::cout << "C++ 3.5.0 Scheduling System Initialized with Teams and Players." << std::endl;
+    std::cout << "--- Example Team & Player Data ---" << std::endl;
+
+    // Display some of the initialized team and player data
+    for (const auto& team : teams) {
+        std::cout << "Team: " << team.city << " (" << team.mascot_theme << ")" << std::endl;
+        std::cout << "  Union: " << (team.union_type == UnionType::Atlantic ? "Atlantic" : "Pacific")
+                  << ", Region: " << static_cast<int>(team.region_type) << std::endl;
+        std::cout << "  Roster (" << team.players.size() << " players):" << std::endl;
+        for (const auto& player : team.players) {
+            std::cout << "    - ID: " << player.player_id << ", Name: " << player.name
+                      << ", Pos: " << player.position << ", Skill: " << player.skill_rating
+                      << ", Salary: $" << player.salary << ", Market Value: $" << player.market_value
+                      << (player.is_star_player ? " (STAR Player)" : "") << std::endl;
+        }
+        std::cout << std::endl;
     }
 
-    // End the game
-    baseballGame.endGame();
+    // Conceptual placeholder for how the LeagueScheduler would still operate on teams.
+    // The One-Game Simulation Agent would now consider individual player attributes and
+    // the influence of their controlling agents, going beyond team-level considerations [1, 3].
+    // LeagueScheduler scheduler;
+    // auto season_schedule = scheduler.generateSeasonSchedule(teams, 110); // Example: 110-120 games per season [12, 13]
+    // ... (logic to print the schedule, as implemented in the scheduling branch) ...
 
     return 0;
 }
