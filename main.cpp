@@ -2,7 +2,7 @@
  * @file main.cpp
  * @brief Main entry point for the unofficial-fan-videogame-baseball-club game.
  * @author  Eeshvar Das (Erik Douglas Ward)
- * @date 2025-Jul-23
+ * @date 2025-Jul-25
  *
  * @copyright Copyright (C) 2025 Eeshvar Das (Erik Douglas Ward)
  *
@@ -25,189 +25,89 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <ctime>
-#include <cstdlib>
+#include "scheduling/league_scheduler_2.h"    // Includes the LeagueSchedulerNS namespace
+#include "money_and_players/game_data.h"      // For Game and ResidencyBlock structs
+// Note: team_data.h and player_data.h are included via game_data.h
 
-// Forward declarations for classes
-class Player;
-class Team;
-class Ball;
-class Game;
+// Using the new namespace explicitly
+using namespace LeagueSchedulerNS;
 
-/**
- * @class Player
- * @brief Represents a single player in the game.
- */
-class Player {
-public:
-    std::string name;
-    int skillLevel;
-
-    Player(std::string name, int skillLevel) : name(name), skillLevel(skillLevel) {}
-
-    void swing() {
-        std::cout << name << " is swinging the bat!" << std::endl;
-    }
-};
-
-/**
- * @class Team
- * @brief Represents a team of players.
- */
-class Team {
-public:
-    std::string name;
-    std::vector<Player> players;
-
-    Team(std::string name) : name(name) {}
-
-    void addPlayer(const Player& player) {
-        players.push_back(player);
-    }
-
-    void printRoster() const {
-        std::cout << "Roster for " << name << ":" << std::endl;
-        for (const auto& player : players) {
-            std::cout << " - " << player.name << " (Skill: " << player.skillLevel << ")" << std::endl;
-        }
-    }
-};
-
-/**
- * @class Ball
- * @brief Represents the baseball.
- */
-class Ball {
-public:
-    int x, y, z; // Position of the ball
-
-    Ball() : x(0), y(0), z(0) {}
-
-    void pitch() {
-        std::cout << "The ball is pitched!" << std::endl;
-        x = 50; // Simulate ball moving towards the batter
-    }
-};
-
-/**
- * @class Game
- * @brief Manages the overall game state and flow.
- */
-class Game {
-private:
-    Team team1;
-    Team team2;
-    Ball ball;
-    int scoreTeam1;
-    int scoreTeam2;
-    int currentInning;
-
-public:
-    Game(const Team& t1, const Team& t2) : team1(t1), team2(t2), scoreTeam1(0), scoreTeam2(0), currentInning(1) {}
-
-    void startGame() {
-        std::cout << "========================================" << std::endl;
-        std::cout << "   Welcome to Unofficial Fan Baseball   " << std::endl;
-        std::cout << "========================================" << std::endl;
-        std::cout << team1.name << " vs. " << team2.name << std::endl;
-        std::cout << "Let's play ball!" << std::endl;
-        std::cout << std::endl;
-
-        team1.printRoster();
-        std::cout << std::endl;
-        team2.printRoster();
-        std::cout << std::endl;
-    }
-
-    void playInning() {
-        std::cout << "--- Inning " << currentInning << " ---" << std::endl;
-        // Simple gameplay logic placeholder
-        handleAtBat(team1);
-        handleAtBat(team2);
-        currentInning++;
-    }
-
-    void handleAtBat(const Team& battingTeam) {
-        std::cout << battingTeam.name << " is now batting." << std::endl;
-        Player batter = battingTeam.players[rand() % battingTeam.players.size()];
-        std::cout << batter.name << " is at the plate." << std::endl;
-
-        ball.pitch();
-        batter.swing();
-
-        // Simulate hit or miss
-        if ((rand() % 10) < batter.skillLevel) {
-            std::cout << batter.name << " hits the ball!" << std::endl;
-            int bases = (rand() % 4) + 1;
-            std::cout << "It's a " << bases << "-base hit!" << std::endl;
-            if (&battingTeam == &team1) {
-                scoreTeam1 += (bases == 4) ? 1 : 0; // Simplified scoring
-            } else {
-                scoreTeam2 += (bases == 4) ? 1 : 0;
-            }
-        } else {
-            std::cout << batter.name << " strikes out!" << std::endl;
-        }
-        printScore();
-        std::cout << std::endl;
-    }
-
-    void printScore() const {
-        std::cout << "Score: " << team1.name << " " << scoreTeam1 << " - " << team2.name << " " << scoreTeam2 << std::endl;
-    }
-
-    bool isGameOver() const {
-        return currentInning > 9;
-    }
-
-    void endGame() {
-        std::cout << "========================================" << std::endl;
-        std::cout << "              Game Over!                " << std::endl;
-        std::cout << "========================================" << std::endl;
-        std::cout << "Final Score:" << std::endl;
-        printScore();
-        if (scoreTeam1 > scoreTeam2) {
-            std::cout << team1.name << " wins!" << std::endl;
-        } else if (scoreTeam2 > scoreTeam1) {
-            std::cout << team2.name << " wins!" << std::endl;
-        } else {
-            std::cout << "It's a tie!" << std::endl;
-        }
-    }
-};
-
-/**
- * @brief The main function where the game execution begins.
- * @return 0 on successful execution.
- */
 int main() {
-    // Seed the random number generator
-    srand(static_cast<unsigned int>(time(0)));
+    std::cout << "Starting APMW League Schedule Generation (C++ 3.5.0 with Money & Players)" << std::endl;
 
-    // Create teams
-    Team homeTeam("Mesa Solar Sox");
-    Team awayTeam("Peoria Javelinas");
+    // Initialize the 18 teams with cities and mascot/fan theme placeholders
+    std::vector<Team> all_teams;
+    int current_team_id = 1;
 
-    // Add players to teams
-    homeTeam.addPlayer(Player("Ace Pitcher", 8));
-    homeTeam.addPlayer(Player("Slugger Sam", 7));
-    homeTeam.addPlayer(Player("Speedy Pete", 6));
+    // Atlantic Union (9 teams)
+    all_teams.emplace_back(current_team_id++, "Maine", "Lumberjack Spirit", UnionType::ATLANTIC, RegionType::KEYSTONE);
+    all_teams.emplace_back(current_team_id++, "New York", "Metropolitan Spirit", UnionType::ATLANTIC, RegionType::KEYSTONE);
+    all_teams.emplace_back(current_team_id++, "Philadelphia", "Founder Spirit", UnionType::ATLANTIC, RegionType::KEYSTONE);
+    all_teams.emplace_back(current_team_id++, "Pittsburgh", "Iron Spirit", UnionType::ATLANTIC, RegionType::KEYSTONE);
+    all_teams.emplace_back(current_team_id++, "Atlanta", "Peach Blossom", UnionType::ATLANTIC, RegionType::TIDEWATER);
+    all_teams.emplace_back(current_team_id++, "Miami", "Manatee Calm", UnionType::ATLANTIC, RegionType::TIDEWATER);
+    all_teams.emplace_back(current_team_id++, "Charlotte", "Aviator Grit", UnionType::ATLANTIC, RegionType::TIDEWATER);
+    all_teams.emplace_back(current_team_id++, "Cleveland", "Guardian Resolve", UnionType::ATLANTIC, RegionType::THE_CONFLUENCE);
+    all_teams.emplace_back(current_team_id++, "Detroit", "Automaker Drive", UnionType::ATLANTIC, RegionType::THE_CONFLUENCE);
 
-    awayTeam.addPlayer(Player("Curveball King", 8));
-    awayTeam.addPlayer(Player("Homerun Harry", 7));
-    awayTeam.addPlayer(Player("Golden Glove Gary", 6));
+    // Pacific Union (9 teams)
+    all_teams.emplace_back(current_team_id++, "Los Angeles", "Star Radiance", UnionType::PACIFIC, RegionType::GOLDEN_PENNANT);
+    all_teams.emplace_back(current_team_id++, "San Diego", "Surf Vibe", UnionType::PACIFIC, RegionType::GOLDEN_PENNANT);
+    all_teams.emplace_back(current_team_id++, "San Francisco", "Seal Endurance", UnionType::PACIFIC, RegionType::GOLDEN_PENNANT);
+    all_teams.emplace_back(current_team_id++, "Seattle", "Rainier Force", UnionType::PACIFIC, RegionType::CASCADE_TERRITORY);
+    all_teams.emplace_back(current_team_id++, "Austin", "Armadillo Resilience", UnionType::PACIFIC, RegionType::THE_SUNSTONE_DIVISION);
+    all_teams.emplace_back(current_team_id++, "Dallas", "Lonestar Pride", UnionType::PACIFIC, RegionType::THE_SUNSTONE_DIVISION);
+    all_teams.emplace_back(current_team_id++, "Denver", "Summit Peak", UnionType::PACIFIC, RegionType::THE_SUNSTONE_DIVISION);
+    all_teams.emplace_back(current_team_id++, "St. Louis", "Archer Aim", UnionType::PACIFIC, RegionType::THE_HEARTLAND_CORE);
+    all_teams.emplace_back(current_team_id++, "Kansas City", "Monarch Reign", UnionType::PACIFIC, RegionType::THE_HEARTLAND_CORE);
 
-    // Create and start the game
-    Game baseballGame(homeTeam, awayTeam);
-    baseballGame.startGame();
-
-    // Main game loop
-    while (!baseballGame.isGameOver()) {
-        baseballGame.playInning();
+    // Populate teams with some players, including "star players"
+    int current_player_id = 1;
+    for (auto& team : all_teams) {
+        team.players.emplace_back(current_player_id++, "PlayerA_" + team.city, 85.0, 5000000, 10000000, false);
+        team.players.emplace_back(current_player_id++, "PlayerB_" + team.city, 80.0, 3000000, 5000000, false);
+        team.players.emplace_back(current_player_id++, "PlayerC_" + team.city, 75.0, 2000000, 3000000, false);
+        if (team.city == "Los Angeles" || team.city == "New York" || team.city == "Austin") {
+            team.players.emplace_back(current_player_id++, "StarPlayer_" + team.city, 95.0, 15000000, 25000000, true);
+        } else {
+            team.players.emplace_back(current_player_id++, "PlayerD_" + team.city, 70.0, 1000000, 2000000, false);
+        }
     }
 
-    // End the game
-    baseballGame.endGame();
+    LeagueScheduler2 scheduler;
+    int games_per_team = 110;
+
+    std::vector<ResidencyBlock> season_schedule = scheduler.generateSeasonSchedule(all_teams, games_per_team);
+
+    std::cout << "\n--- Sample Season Schedule ---" << std::endl;
+    for (const auto& block : season_schedule) {
+        std::cout << "--------------------------------------" << std::endl;
+        std::cout << "Residency Block: " << block.host_team.city << " Host "
+                  << (block.is_apex_residency ? "(APEX RESIDENCY)" : "") << std::endl;
+        std::cout << "  Visiting Residents: ";
+        for (const auto& visitor : block.visiting_residents) {
+            std::cout << visitor.city << " ";
+        }
+        std::cout << std::endl;
+        std::cout << "  Dates: " << block.start_date << " to " << block.end_date << std::endl;
+        std::cout << "  Games (" << block.games.size() << "):" << std::endl;
+        for (const auto& game : block.games) {
+            std::cout << "    - " << game.date << ": "
+                      << game.team1.city << " (Away/First Bat) vs. "
+                      << game.team2.city << " (Home/Second Bat) "
+                      << " at " << game.actual_host_stadium.city << " Stadium. Type: ";
+            if (game.game_type == GameType::REGULAR_SEASON) {
+                std::cout << "REGULAR_SEASON";
+            } else if (game.game_type == GameType::CROSSROADS_GAME) {
+                std::cout << "CROSSROADS_GAME";
+            } else if (game.game_type == GameType::APEX_RESIDENCY_GAME) {
+                std::cout << "APEX_RESIDENCY_GAME";
+            }
+            std::cout << std::endl;
+        }
+    }
+
+    std::cout << "\nSchedule generation complete." << std::endl;
 
     return 0;
 }
