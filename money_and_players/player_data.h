@@ -16,11 +16,11 @@ struct Player {
     int games_played_season;    // Games played this season, for fatigue
     double fatigue_level;       // Current fatigue level (e.g., 0.0 to 1.0)
 
-    // Financial attributes for "Money and Players" concept [8, 23]
+    // Financial attributes for "Money and Players" concept
     long long salary;           // Player's annual salary
     long long market_value;     // Player's market value
 
-    bool is_star_player;        // Flag for star players, who might be subject to special agentic control [8, 16]
+    bool is_star_player;        // Flag for star players, who might be subject to special agentic control
 
     // Performance metrics (simplified for this example)
     std::map<std::string, double> performance_metrics; // e.g., "batting_average", "era", "wins_above_replacement"
