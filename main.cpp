@@ -2,7 +2,7 @@
  * @file main.cpp
  * @brief Main entry point for the unofficial-fan-videogame-baseball-club game.
  * @author  Eeshvar Das (Erik Douglas Ward)
- * @date 2025-Jul-23
+ * @date 2025-Jul-25
  *
  * @copyright Copyright (C) 2025 Eeshvar Das (Erik Douglas Ward)
  *
@@ -22,15 +22,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// main.cpp (Modified for Money and Players branch)
-
 #include <iostream>
 #include <vector>
 #include <string>
-#include "scheduling/league_scheduler_2.h" // Includes the LeagueSchedulerNS namespace
-#include "scheduling/team_data.h"       // For Team struct
-#include "scheduling/player_data.h"     // For Player struct [26]
-#include "scheduling/game_data.h"       // For Game and ResidencyBlock structs [9]
+#include "scheduling/league_scheduler_2.h"    // Includes the LeagueSchedulerNS namespace
+#include "money_and_players/game_data.h"      // For Game and ResidencyBlock structs
+// Note: team_data.h and player_data.h are included via game_data.h
 
 // Using the new namespace explicitly
 using namespace LeagueSchedulerNS;
@@ -38,55 +35,46 @@ using namespace LeagueSchedulerNS;
 int main() {
     std::cout << "Starting APMW League Schedule Generation (C++ 3.5.0 with Money & Players)" << std::endl;
 
-    // Initialize the 18 teams with cities and mascot/fan theme placeholders [17, 27]
-    // Note: Official team names are omitted as per C++ 3.5.0 directive for this version [26, 27]
+    // Initialize the 18 teams with cities and mascot/fan theme placeholders
     std::vector<Team> all_teams;
+    int current_id = 1;
 
     // Atlantic Union (9 teams)
-    // Keystone Region
-    all_teams.push_back({"Maine", "Lumberjack Spirit", UnionType::ATLANTIC_UNION, RegionType::KEYSTONE, {}});
-    all_teams.push_back({"New York", "Metropolitan Spirit", UnionType::ATLANTIC_UNION, RegionType::KEYSTONE, {}});
-    all_teams.push_back({"Philadelphia", "Founder Spirit", UnionType::ATLANTIC_UNION, RegionType::KEYSTONE, {}});
-    all_teams.push_back({"Pittsburgh", "Iron Spirit", UnionType::ATLANTIC_UNION, RegionType::KEYSTONE, {}});
-    // Tidewater Region
-    all_teams.push_back({"Atlanta", "Peach Blossom", UnionType::ATLANTIC_UNION, RegionType::TIDEWATER, {}});
-    all_teams.push_back({"Miami", "Manatee Calm", UnionType::ATLANTIC_UNION, RegionType::TIDEWATER, {}});
-    all_teams.push_back({"Charlotte", "Aviator Grit", UnionType::ATLANTIC_UNION, RegionType::TIDEWATER, {}});
-    // The Confluence
-    all_teams.push_back({"Cleveland", "Guardian Resolve", UnionType::ATLANTIC_UNION, RegionType::CONFLUENCE, {}});
-    all_teams.push_back({"Detroit", "Automaker Drive", UnionType::ATLANTIC_UNION, RegionType::CONFLUENCE, {}});
+    all_teams.push_back({current_id++, "Maine", "Lumberjack Spirit", UnionType::ATLANTIC_UNION, RegionType::KEYSTONE, {}});
+    all_teams.push_back({current_id++, "New York", "Metropolitan Spirit", UnionType::ATLANTIC_UNION, RegionType::KEYSTONE, {}});
+    all_teams.push_back({current_id++, "Philadelphia", "Founder Spirit", UnionType::ATLANTIC_UNION, RegionType::KEYSTONE, {}});
+    all_teams.push_back({current_id++, "Pittsburgh", "Iron Spirit", UnionType::ATLANTIC_UNION, RegionType::KEYSTONE, {}});
+    all_teams.push_back({current_id++, "Atlanta", "Peach Blossom", UnionType::ATLANTIC_UNION, RegionType::TIDEWATER, {}});
+    all_teams.push_back({current_id++, "Miami", "Manatee Calm", UnionType::ATLANTIC_UNION, RegionType::TIDEWATER, {}});
+    all_teams.push_back({current_id++, "Charlotte", "Aviator Grit", UnionType::ATLANTIC_UNION, RegionType::TIDEWATER, {}});
+    all_teams.push_back({current_id++, "Cleveland", "Guardian Resolve", UnionType::ATLANTIC_UNION, RegionType::CONFLUENCE, {}});
+    all_teams.push_back({current_id++, "Detroit", "Automaker Drive", UnionType::ATLANTIC_UNION, RegionType::CONFLUENCE, {}});
 
     // Pacific Union (9 teams)
-    // Golden Pennant
-    all_teams.push_back({"Los Angeles", "Star Radiance", UnionType::PACIFIC_UNION, RegionType::GOLDEN_PENNANT, {}});
-    all_teams.push_back({"San Diego", "Surf Vibe", UnionType::PACIFIC_UNION, RegionType::GOLDEN_PENNANT, {}});
-    all_teams.push_back({"San Francisco", "Seal Endurance", UnionType::PACIFIC_UNION, RegionType::GOLDEN_PENNANT, {}});
-    // Cascade Territory
-    all_teams.push_back({"Seattle", "Rainier Force", UnionType::PACIFIC_UNION, RegionType::CASCADE_TERRITORY, {}});
-    // The Sunstone Division
-    all_teams.push_back({"Austin", "Armadillo Resilience", UnionType::PACIFIC_UNION, RegionType::SUNSTONE_DIVISION, {}});
-    all_teams.push_back({"Dallas", "Lonestar Pride", UnionType::PACIFIC_UNION, RegionType::SUNSTONE_DIVISION, {}});
-    all_teams.push_back({"Denver", "Summit Peak", UnionType::PACIFIC_UNION, RegionType::SUNSTONE_DIVISION, {}});
-    // The Heartland Core
-    all_teams.push_back({"St. Louis", "Archer Aim", UnionType::PACIFIC_UNION, RegionType::HEARTLAND_CORE, {}});
-    all_teams.push_back({"Kansas City", "Monarch Reign", UnionType::PACIFIC_UNION, RegionType::HEARTLAND_CORE, {}});
+    all_teams.push_back({current_id++, "Los Angeles", "Star Radiance", UnionType::PACIFIC_UNION, RegionType::GOLDEN_PENNANT, {}});
+    all_teams.push_back({current_id++, "San Diego", "Surf Vibe", UnionType::PACIFIC_UNION, RegionType::GOLDEN_PENNANT, {}});
+    all_teams.push_back({current_id++, "San Francisco", "Seal Endurance", UnionType::PACIFIC_UNION, RegionType::GOLDEN_PENNANT, {}});
+    all_teams.push_back({current_id++, "Seattle", "Rainier Force", UnionType::PACIFIC_UNION, RegionType::CASCADE_TERRITORY, {}});
+    all_teams.push_back({current_id++, "Austin", "Armadillo Resilience", UnionType::PACIFIC_UNION, RegionType::SUNSTONE_DIVISION, {}});
+    all_teams.push_back({current_id++, "Dallas", "Lonestar Pride", UnionType::PACIFIC_UNION, RegionType::SUNSTONE_DIVISION, {}});
+    all_teams.push_back({current_id++, "Denver", "Summit Peak", UnionType::PACIFIC_UNION, RegionType::SUNSTONE_DIVISION, {}});
+    all_teams.push_back({current_id++, "St. Louis", "Archer Aim", UnionType::PACIFIC_UNION, RegionType::HEARTLAND_CORE, {}});
+    all_teams.push_back({current_id++, "Kansas City", "Monarch Reign", UnionType::PACIFIC_UNION, RegionType::HEARTLAND_CORE, {}});
 
-    // Populate teams with some players, including "star players" [17, 27]
-    // Player data structures with financial values [26, 27]
+    // Populate teams with some players, including "star players"
     for (auto& team : all_teams) {
         team.roster.push_back({"PlayerA_" + team.city, 85, 1.5, 5000000, 10000000, false});
         team.roster.push_back({"PlayerB_" + team.city, 80, 1.2, 3000000, 5000000, false});
         team.roster.push_back({"PlayerC_" + team.city, 75, 1.0, 2000000, 3000000, false});
-        // Add a star player to some teams for demonstration
         if (team.city == "Los Angeles" || team.city == "New York" || team.city == "Austin") {
-            team.roster.push_back({"StarPlayer_" + team.city, 95, 2.0, 15000000, 25000000, true}); // [17, 26]
+            team.roster.push_back({"StarPlayer_" + team.city, 95, 2.0, 15000000, 25000000, true});
         } else {
             team.roster.push_back({"PlayerD_" + team.city, 70, 0.8, 1000000, 2000000, false});
         }
     }
 
     LeagueScheduler2 scheduler;
-    int games_per_team = 110; // APMW lore recommends 110-120 games [8, 27]
+    int games_per_team = 110;
 
     std::vector<ResidencyBlock> season_schedule = scheduler.generateSeasonSchedule(all_teams, games_per_team);
 
@@ -94,7 +82,7 @@ int main() {
     for (const auto& block : season_schedule) {
         std::cout << "--------------------------------------" << std::endl;
         std::cout << "Residency Block: " << block.host_team.city << " Host "
-                  << (block.is_apex_residency ? "(APEX RESIDENCY)" : "") << std::endl; // NEW: Indicate Apex Residency
+                  << (block.is_apex_residency ? "(APEX RESIDENCY)" : "") << std::endl;
         std::cout << "  Visiting Residents: ";
         for (const auto& visitor : block.visiting_residents) {
             std::cout << visitor.city << " ";
@@ -111,7 +99,7 @@ int main() {
                 std::cout << "REGULAR_SEASON";
             } else if (game.game_type == GameType::CROSSROADS_GAME) {
                 std::cout << "CROSSROADS_GAME";
-            } else if (game.game_type == GameType::APEX_RESIDENCY_GAME) { // NEW GameType display
+            } else if (game.game_type == GameType::APEX_RESIDENCY_GAME) {
                 std::cout << "APEX_RESIDENCY_GAME";
             }
             std::cout << std::endl;
