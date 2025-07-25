@@ -1,3 +1,10 @@
+> **⚠️ Repository Deprecated ⚠️**
+>
+> This repository is no longer maintained. The project has been moved to a new location as part of a larger monorepo.
+>
+> **Please find the latest version here:**
+> [**apmw-essence-groove/responsive-webpage-template**](https://github.com/apmw-essence-groove/responsive-webpage-template/tree/cpp/homepage-app/unofficial-fan-videogame-baseball-club-main)
+
 # APMW Baseball Simulator (unofficial-fan-videogame-baseball-club)
 
 This is an unofficial fan-made baseball video game, serving as the C++ 3.5.0 core for the Ayurveda Project Management World (APMW) project. It is a text-based simulation of a baseball league's season schedule, built with a focus on modularity, agent-driven logic, and deep lore integration.
@@ -15,10 +22,10 @@ This is an unofficial fan-made baseball video game, serving as the C++ 3.5.0 cor
 
 This project uses CMake. You will need a C++ compiler (like G++, Clang, or MSVC) and CMake installed.
 
-1.  **Clone the repository:**
+1.  **Clone the new repository:**
     ```bash
-    git clone [https://github.com/your-username/unofficial-fan-videogame-baseball-club.git](https://github.com/your-username/unofficial-fan-videogame-baseball-club.git)
-    cd unofficial-fan-videogame-baseball-club
+    git clone [https://github.com/apmw-essence-groove/responsive-webpage-template.git](https://github.com/apmw-essence-groove/responsive-webpage-template.git)
+    cd responsive-webpage-template/cpp/homepage-app/unofficial-fan-videogame-baseball-club-main
     ```
 
 2.  **Configure the project with CMake:**
