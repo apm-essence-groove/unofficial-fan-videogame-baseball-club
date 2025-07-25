@@ -1,46 +1,41 @@
+// team_data.h (Modified for Money and Players branch)
 #ifndef TEAM_DATA_H
 #define TEAM_DATA_H
 
 #include <string>
-#include <vector>
-#include <map>
+#include <vector>          // Required for std::vector
+#include "player_data.h"   // NEW: Include the new player data structure
 
-// Forward declarations to avoid circular dependencies if needed later
-class Team;
-class Game;
-class ResidencyBlock;
-
-// Define Unions and Regions as per APMW lore [12, 31, 36, 37]
+// Enum for Union types, reflecting the league's organizational structure [5, 6]
 enum class UnionType {
-    Atlantic, // Atlantic Union [12, 31, 36, 38]
-    Pacific   // Pacific Union [12, 21, 31, 37]
+    Atlantic,
+    Pacific
 };
 
+// Enum for Region types within Unions, deepening the lore [5, 6]
 enum class RegionType {
-    // Atlantic Union Regions [31, 37]
-    Keystone,    // Northeast Corridor [12, 31, 37]
-    Tidewater,   // Southeast [12, 31, 37]
-    Confluence,  // Great Lakes industrial heartland, integrates former "Crossroads" teams [17, 31, 37, 39]
-
-    // Pacific Union Regions [31, 39]
-    GoldenPennant,  // California, formerly "Sunset Circuit" [12, 31, 39]
-    CascadeTerritory, // Pacific Northwest [12, 31, 39]
-    SunstoneDivision, // Texas, integrates former "Crossroads" teams [17, 31, 39]
-    HeartlandCore   // Deeply rooted in American identity, integrates former "Crossroads" teams [17, 31, 39]
+    Keystone, Tidewater, TheConfluence, // Atlantic Union regions
+    GoldenPennant, CascadeTerritory, TheSunstoneDivision, TheHeartlandCore // Pacific Union regions
 };
 
-// Simplified Team structure for C++ 3.5.0 as per your directive:
-// No official team name defined yet, but cities are okay, and using mascots/fan themes.
+// Structure to represent a baseball team
 struct Team {
-    std::string city;         // e.g., "Maine", "New York", "Austin" [31-33]
-    std::string mascot_theme; // Placeholder for mascot or fan theme (e.g., "Lumberjack Theme", "Armadillo Fanbase")
+    std::string city;
+    // For C++ 3.5.0, official team names are intentionally excluded;
+    // using mascot/fan theme as a placeholder [5-8].
+    std::string mascot_theme;
     UnionType union_type;
     RegionType region_type;
-    // Add other team-related data as needed for simulation, but no 'official_name' string for now.
+    std::vector<Player> players; // NEW: Holds the team's roster of individual players [1, 3]
 
-    // Constructor for easier initialization
-    Team(std::string city_name, std::string theme, UnionType u_type, RegionType r_type)
-        : city(city_name), mascot_theme(theme), union_type(u_type), region_type(r_type) {}
+    // Constructor for easy initialization of Team objects
+    Team(const std::string& c, const std::string& mt, UnionType ut, RegionType rt)
+        : city(c), mascot_theme(mt), union_type(ut), region_type(rt) {}
+
+    // Method to add a player to the team's roster
+    void add_player(const Player& p) {
+        players.push_back(p);
+    }
 };
 
 #endif // TEAM_DATA_H
