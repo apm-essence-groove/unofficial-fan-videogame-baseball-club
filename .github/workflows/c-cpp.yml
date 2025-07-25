@@ -27,13 +27,13 @@ jobs:
       - name: Build Project
         run: cmake --build build
 
-      # (Optional) Runs the executable as a basic test
+      # Runs the executable as a basic test
       - name: Run the game executable
-        run: ./build/baseball_game
+        run: ./build/apmw_baseball_simulator
 
-      # (Optional) Uploads the compiled executable as a build artifact
+      # Uploads the compiled executable as a build artifact
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: baseball-game-executable
-          path: build/baseball_game
+          name: apmw-baseball-simulator-executable
+          path: build/apmw_baseball_simulator
