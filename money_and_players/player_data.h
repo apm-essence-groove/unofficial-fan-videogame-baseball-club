@@ -2,27 +2,37 @@
 #define PLAYER_DATA_H
 
 #include <string>
-#include <vector> // Though not directly used by Player struct, often needed for collections of players.
+#include <vector>
+#include <map>
 
-// Structure to represent an individual player
+// Represents a single player in the league.
+// This structure holds attributes that can be used by the One-Game Simulation Agent
+// and other agents to consider individual player performance and financial impact.
 struct Player {
-    int player_id;            // Unique identifier for the player
-    std::string name;         // Player's full name
-    std::string position;     // E.g., "P" (Pitcher), "C" (Catcher), "1B" (First Baseman), "CF" (Center Fielder)
-    double skill_rating;      // Overall skill metric for game simulation (e.g., 0.0-100.0) [1]
-    double salary;            // Player's annual salary, a key financial attribute [1, 2]
-    double market_value;      // Player's estimated market value for trades or contracts [1]
-    bool is_star_player;      // True if the player is considered a "star" and subject to agentic control [1, 2]
+    int id;
+    std::string name;
+    // Example attributes relevant to agentic control and simulation
+    double skill_rating;        // Overall skill rating (e.g., 0.0 to 100.0)
+    int games_played_season;    // Games played this season, for fatigue
+    double fatigue_level;       // Current fatigue level (e.g., 0.0 to 1.0)
 
-    // Constructor for easy initialization of Player objects
-    Player(int id, const std::string& n, const std::string& pos,
-           double skill, double sal, double mv, bool is_star)
-        : player_id(id), name(n), position(pos), skill_rating(skill),
-          salary(sal), market_value(mv), is_star_player(is_star) {}
+    // Financial attributes for "Money and Players" concept [8, 23]
+    long long salary;           // Player's annual salary
+    long long market_value;     // Player's market value
 
-    // Note: The direct integration with ADK agents (e.g., storing an agent ID or pointer)
-    // would be handled by higher-level logic or specific agent implementations,
-    // not necessarily directly within this fundamental data structure.
+    bool is_star_player;        // Flag for star players, who might be subject to special agentic control [8, 16]
+
+    // Performance metrics (simplified for this example)
+    std::map<std::string, double> performance_metrics; // e.g., "batting_average", "era", "wins_above_replacement"
+
+    // Default constructor
+    Player() : id(0), name(""), skill_rating(0.0), games_played_season(0), fatigue_level(0.0),
+               salary(0), market_value(0), is_star_player(false) {}
+
+    // Parameterized constructor for easy initialization
+    Player(int _id, const std::string& _name, double _skill_rating, long long _salary, long long _market_value, bool _is_star_player)
+        : id(_id), name(_name), skill_rating(_skill_rating), games_played_season(0), fatigue_level(0.0),
+          salary(_salary), market_value(_market_value), is_star_player(_is_star_player) {}
 };
 
 #endif // PLAYER_DATA_H
