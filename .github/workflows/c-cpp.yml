@@ -6,7 +6,7 @@ name: C++ CI with CMake
 # Controls when the workflow will run
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "apex" ]
   pull_request:
     branches: [ "main", "apex" ]
   workflow_dispatch:
