@@ -25,10 +25,34 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "team_data.h"    // Includes the modified Team structure
-#include "player_data.h"  // NEW: Includes the Player structure
-// #include "game_data.h"    // Existing header for Game and ResidencyBlock structures
-// #include "league_scheduler.h" // Existing header for LeagueScheduler class
+#include <random>
+#include <algorithm> // For std::shuffle
+#include <iomanip>   // For std::setw
+
+#include "team_data.h"
+#include "game_data.h"
+#include "league_scheduler.h"
+#include "player_data.h" // Include for Player struct
+
+// Helper to generate a unique player ID
+int next_player_id = 1;
+Player generateRandomPlayer(const std::string& team_city, bool is_star = false) {
+    std::string player_name = "Player_" + std::to_string(next_player_id);
+    double skill = 50.0 + (rand() % 500) / 10.0; // 50.0 to 100.0
+    long long salary = 500000 + (rand() % 100) * 10000; // Base salary
+    long long market_value = salary * (1.0 + (rand() % 50) / 100.0); // Market value
+
+    if (is_star) {
+        player_name = "Star_" + team_city + "_" + std::to_string(next_player_id);
+        skill = 90.0 + (rand() % 100) / 10.0; // 90.0 to 100.0 for stars
+        salary = 10000000 + (rand() % 100) * 1000000; // High salary for stars
+        market_value = salary * (2.0 + (rand() % 100) / 100.0); // High market value for stars
+    }
+    next_player_id++;
+    return Player(next_player_id - 1, player_name, skill, salary, market_value, is_star);
+}
+
+//BEGIN PROGRESSIVE CONFLICT
 
 // Forward declarations for classes
 class Player;
@@ -178,67 +202,92 @@ public:
     }
 };
 
+//END PROGRESSIVE CONFLICT
+
+
 /**
  * @brief The main function where the game execution begins.
  * @return 0 on successful execution.
  */
 int main() {
-    // Initialize 18 teams (simplified to a few examples for brevity)
-    // Note: Official team names are still excluded in this C++ 3.5.0 version,
-    // using city and mascot/fan theme placeholders instead [5-8].
+    std::cout << "Starting APMW Baseball C++ 3.5.0 Simulation Setup..." << std::endl;
+
+    // Initialize the 18 teams as per the 'single source of truth' for the league structure [50, 51]
+    // Using cities and mascot/fan theme placeholders for C++ 3.5.0 as requested [24-26]
     std::vector<Team> teams;
+    int team_id_counter = 1;
 
-    // Example Teams (using established APMW lore cities/themes)
-    Team maine_lumberjacks("Maine", "Lumberjack Spirit", UnionType::Atlantic, RegionType::Keystone); [9]
-    Team ny_metropolitans("New York", "Metropolitan Pulse", UnionType::Atlantic, RegionType::Keystone); [9]
-    Team la_stars("Los Angeles", "Hollywood Stars", UnionType::Pacific, RegionType::GoldenPennant); [10]
-    Team cleveland_guardians("Cleveland", "Industrial Grit", UnionType::Atlantic, RegionType::TheConfluence); [10]
+    // Atlantic Union (9 teams)
+    teams.push_back(Team(team_id_counter++, "Maine", "Lumberjack Spirit", UnionType::ATLANTIC, RegionType::KEYSTONE));
+    teams.push_back(Team(team_id_counter++, "New York", "Metropolitan Pride", UnionType::ATLANTIC, RegionType::KEYSTONE));
+    teams.push_back(Team(team_id_counter++, "Philadelphia", "Founder's Legacy", UnionType::ATLANTIC, RegionType::KEYSTONE));
+    teams.push_back(Team(team_id_counter++, "Pittsburgh", "Iron Giant Strength", UnionType::ATLANTIC, RegionType::KEYSTONE));
+    teams.push_back(Team(team_id_counter++, "Atlanta", "Peach Power", UnionType::ATLANTIC, RegionType::TIDEWATER));
+    teams.push_back(Team(team_id_counter++, "Miami", "Manatee Calm", UnionType::ATLANTIC, RegionType::TIDEWATER));
+    teams.push_back(Team(team_id_counter++, "Charlotte", "Aviator's Flight", UnionType::ATLANTIC, RegionType::TIDEWATER));
+    teams.push_back(Team(team_id_counter++, "Cleveland", "Guardian Spirit", UnionType::ATLANTIC, RegionType::THE_CONFLUENCE));
+    teams.push_back(Team(team_id_counter++, "Detroit", "Automaker Drive", UnionType::ATLANTIC, RegionType::THE_CONFLUENCE));
 
-    // Add example Players to teams, demonstrating financial values and star status [1-3]
-    // Player(id, name, position, skill_rating, salary, market_value, is_star_player)
-    maine_lumberjacks.add_player(Player(1, "Babe Blue", "P", 95.0, 30000000.0, 45000000.0, true)); // Star Player [1, 2]
-    maine_lumberjacks.add_player(Player(2, "Paul Bunyan", "1B", 88.0, 12000000.0, 15000000.0, false));
-    maine_lumberjacks.add_player(Player(3, "Sawyer McTree", "OF", 80.0, 5000000.0, 6000000.0, false));
+    // Pacific Union (9 teams)
+    teams.push_back(Team(team_id_counter++, "Los Angeles", "Star Power", UnionType::PACIFIC, RegionType::GOLDEN_PENNANT));
+    teams.push_back(Team(team_id_counter++, "San Diego", "Surf Vibe", UnionType::PACIFIC, RegionType::GOLDEN_PENNANT));
+    teams.push_back(Team(team_id_counter++, "San Francisco", "Seal's Wisdom", UnionType::PACIFIC, RegionType::GOLDEN_PENNANT));
+    teams.push_back(Team(team_id_counter++, "Seattle", "Rainier Resolve", UnionType::PACIFIC, RegionType::CASCADE_TERRITORY));
+    teams.push_back(Team(team_id_counter++, "Austin", "Armadillo Resilience", UnionType::PACIFIC, RegionType::THE_SUNSTONE_DIVISION));
+    teams.push_back(Team(team_id_counter++, "Dallas", "Lonestar Spirit", UnionType::PACIFIC, RegionType::THE_SUNSTONE_DIVISION));
+    teams.push_back(Team(team_id_counter++, "Denver", "Summit Peak", UnionType::PACIFIC, RegionType::THE_SUNSTONE_DIVISION));
+    teams.push_back(Team(team_id_counter++, "St. Louis", "Archer's Aim", UnionType::PACIFIC, RegionType::THE_HEARTLAND_CORE));
+    teams.push_back(Team(team_id_counter++, "Kansas City", "Monarch Reign", UnionType::PACIFIC, RegionType::THE_HEARTLAND_CORE));
 
-    ny_metropolitans.add_player(Player(4, "Empire Ace", "P", 92.0, 25000000.0, 35000000.0, true)); // Star Player [1, 2]
-    ny_metropolitans.add_player(Player(5, "Broadway Bomber", "CF", 87.0, 11000000.0, 14000000.0, false));
+    std::cout << "Initialized " << teams.size() << " teams." << std::endl;
 
-    la_stars.add_player(Player(6, "Hollywood Heat", "P", 98.0, 40000000.0, 60000000.0, true)); // High-value Star Player [1, 2]
-    la_stars.add_player(Player(7, "Sunset Striker", "SS", 90.0, 18000000.0, 22000000.0, false));
-
-    cleveland_guardians.add_player(Player(8, "Lakefront Lefty", "P", 85.0, 9000000.0, 10000000.0, false));
-    cleveland_guardians.add_player(Player(9, "Rustbelt Slugger", "DH", 90.0, 15000000.0, 20000000.0, true)); // Star Player [1, 2]
-
-    teams.push_back(maine_lumberjacks);
-    teams.push_back(ny_metropolitans);
-    teams.push_back(la_stars);
-    teams.push_back(cleveland_guardians);
-    // ... In a full implementation, all 18 teams would be created and populated [11].
-
-    std::cout << "C++ 3.5.0 Scheduling System Initialized with Teams and Players." << std::endl;
-    std::cout << "--- Example Team & Player Data ---" << std::endl;
-
-    // Display some of the initialized team and player data
-    for (const auto& team : teams) {
-        std::cout << "Team: " << team.city << " (" << team.mascot_theme << ")" << std::endl;
-        std::cout << "  Union: " << (team.union_type == UnionType::Atlantic ? "Atlantic" : "Pacific")
-                  << ", Region: " << static_cast<int>(team.region_type) << std::endl;
-        std::cout << "  Roster (" << team.players.size() << " players):" << std::endl;
-        for (const auto& player : team.players) {
-            std::cout << "    - ID: " << player.player_id << ", Name: " << player.name
-                      << ", Pos: " << player.position << ", Skill: " << player.skill_rating
-                      << ", Salary: $" << player.salary << ", Market Value: $" << player.market_value
-                      << (player.is_star_player ? " (STAR Player)" : "") << std::endl;
+    // Populate each team with players, including some star players [8, 9]
+    std::srand(static_cast<unsigned int>(std::time(nullptr))); // Seed for player generation
+    for (auto& team : teams) {
+        // Each team has 25 players (example roster size)
+        for (int i = 0; i < 25; ++i) {
+            // Randomly assign a few star players
+            bool is_star = (rand() % 10 == 0); // ~10% chance for a star player
+            team.players.push_back(generateRandomPlayer(team.city, is_star));
         }
-        std::cout << std::endl;
+        std::cout << "  " << team.city << " (" << team.mascot_theme << ") has " << team.players.size() << " players." << std::endl;
+        int star_count = 0;
+        for(const auto& player : team.players) {
+            if (player.is_star_player) {
+                star_count++;
+                std::cout << "    - Star Player: " << player.name << " (Skill: " << std::fixed << std::setprecision(1) << player.skill_rating
+                          << ", Salary: $" << player.salary << ", Market Value: $" << player.market_value << ")" << std::endl;
+            }
+        }
+        if (star_count == 0) {
+             std::cout << "    (No star players on this team in this run)" << std::endl;
+        }
     }
 
-    // Conceptual placeholder for how the LeagueScheduler would still operate on teams.
-    // The One-Game Simulation Agent would now consider individual player attributes and
-    // the influence of their controlling agents, going beyond team-level considerations [1, 3].
-    // LeagueScheduler scheduler;
-    // auto season_schedule = scheduler.generateSeasonSchedule(teams, 110); // Example: 110-120 games per season [12, 13]
-    // ... (logic to print the schedule, as implemented in the scheduling branch) ...
+    LeagueScheduler scheduler;
+    // Example: 110-120 games per season recommended for MVP [38-40]
+    // The current createResidencyBlock is simplified and won't hit this target accurately,
+    // but the function call demonstrates the intent.
+    auto season_schedule = scheduler.generateSeasonSchedule(teams, 110);
+
+    // Logic to print the schedule [Conceptual placeholder replacement]
+    std::cout << "\n--- Generated Season Schedule ---" << std::endl;
+    for (const auto& residency_block : season_schedule) {
+        std::cout << "\nResidency Block: Host - " << residency_block.host_team.city << " (" << residency_block.host_team.mascot_theme << ")";
+        std::cout << ", Visitors: ";
+        for (const auto& visitor : residency_block.visiting_residents) {
+            std::cout << visitor.city << " (" << visitor.mascot_theme << ") ";
+        }
+        std::cout << std::endl;
+        std::cout << "  Games in this block (" << residency_block.games.size() << "):" << std::endl;
+        for (const auto& game : residency_block.games) {
+            std::cout << "    " << game.date << " [" << (game.game_type == GameType::CROSSROADS_GAME ? "CROSSROADS" : "REGULAR") << "]: "
+                      << game.team1.city << " vs " << game.team2.city
+                      << " (Designated Home: " << game.designated_home_team_for_batting.city << " @ "
+                      << game.actual_host_stadium.city << " Stadium)" << std::endl;
+        }
+    }
+    std::cout << "\n--- End of Schedule ---" << std::endl;
 
     return 0;
 }
