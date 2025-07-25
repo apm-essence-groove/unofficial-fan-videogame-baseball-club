@@ -1,41 +1,53 @@
-// team_data.h (Modified for Money and Players branch)
 #ifndef TEAM_DATA_H
 #define TEAM_DATA_H
 
 #include <string>
-#include <vector>          // Required for std::vector
-#include "player_data.h"   // NEW: Include the new player data structure
+#include <vector>
+#include "player_data.h" // Include the new player data structure
 
-// Enum for Union types, reflecting the league's organizational structure [5, 6]
+// Enum for Union types (e.g., Atlantic Union, Pacific Union) [27, 28, 30, 31, 33, 41, 42]
 enum class UnionType {
-    Atlantic,
-    Pacific
+    ATLANTIC,
+    PACIFIC,
+    UNKNOWN
 };
 
-// Enum for Region types within Unions, deepening the lore [5, 6]
+// Enum for Region types within Unions [28, 30, 31, 33, 42-44]
 enum class RegionType {
-    Keystone, Tidewater, TheConfluence, // Atlantic Union regions
-    GoldenPennant, CascadeTerritory, TheSunstoneDivision, TheHeartlandCore // Pacific Union regions
+    KEYSTONE,
+    TIDEWATER,
+    THE_CONFLUENCE,
+    GOLDEN_PENNANT,
+    CASCADE_TERRITORY,
+    THE_SUNSTONE_DIVISION,
+    THE_HEARTLAND_CORE,
+    UNKNOWN
 };
 
-// Structure to represent a baseball team
+// Represents a baseball team in the league.
+// For C++ 3.5.0, no official team name field is included,
+// but city and mascot_theme are used as placeholders [24-26].
 struct Team {
+    int id;
     std::string city;
-    // For C++ 3.5.0, official team names are intentionally excluded;
-    // using mascot/fan theme as a placeholder [5-8].
-    std::string mascot_theme;
+    std::string mascot_theme; // Placeholder for mascot or fan theme [24-26]
     UnionType union_type;
     RegionType region_type;
-    std::vector<Player> players; // NEW: Holds the team's roster of individual players [1, 3]
+    int wins;
+    int losses;
+    // New: A roster of Player objects for this team [8, 9]
+    std::vector<Player> players;
 
-    // Constructor for easy initialization of Team objects
-    Team(const std::string& c, const std::string& mt, UnionType ut, RegionType rt)
-        : city(c), mascot_theme(mt), union_type(ut), region_type(rt) {}
+    // Default constructor
+    Team() : id(0), city(""), mascot_theme(""), union_type(UnionType::UNKNOWN),
+             region_type(RegionType::UNKNOWN), wins(0), losses(0) {}
 
-    // Method to add a player to the team's roster
-    void add_player(const Player& p) {
-        players.push_back(p);
-    }
+    // Parameterized constructor
+    Team(int _id, const std::string& _city, const std::string& _mascot_theme,
+         UnionType _union_type, RegionType _region_type)
+        : id(_id), city(_city), mascot_theme(_mascot_theme),
+          union_type(_union_type), region_type(_region_type),
+          wins(0), losses(0) {}
 };
 
 #endif // TEAM_DATA_H
